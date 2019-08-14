@@ -128,7 +128,7 @@ const Register = ({ navigation }) => {
   );
 
   return (
-    <Container>
+    <Container alignItems="center" paddingTop={50}>
       {stepCreateAccount()}
       {submitAccount()}
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>

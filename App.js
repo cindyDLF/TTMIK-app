@@ -75,11 +75,16 @@ const TabNavigator = createBottomTabNavigator(
 );
 
 const App = createAppContainer(
-  createSwitchNavigator({
-    LoginNavigator,
-    WelcomeNavigator,
-    TabNavigator
-  })
+  createSwitchNavigator(
+    {
+      LoginNavigator,
+      WelcomeNavigator,
+      TabNavigator
+    },
+    {
+      initialRouteName: "TabNavigator"
+    }
+  )
 );
 
 export default App;

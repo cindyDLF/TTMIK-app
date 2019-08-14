@@ -14,7 +14,7 @@ const Login = ({ navigation }) => {
   const email = useInput();
   const password = useInput();
   return (
-    <Container>
+    <Container alignItems="center" paddingTop={50}>
       <Title title="TTMIK">Login</Title>
       <Input
         placeholder="email"

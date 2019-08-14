@@ -1,8 +1,11 @@
 import React from "react";
 import { Image, TouchableOpacity, StyleSheet } from "react-native";
 import { COLORS } from "../constants/Global";
-const Back = ({ back }) => (
-  <TouchableOpacity onPress={back} style={styles.back}>
+const Back = ({ back, position }) => (
+  <TouchableOpacity
+    onPress={back}
+    style={[styles.back, position ? { position: "absolute", left: 20 } : {}]}
+  >
     <Image
       style={{ width: 30, height: 30 }}
       source={require("../assets/go-back.png")}
