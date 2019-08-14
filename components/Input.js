@@ -24,7 +24,11 @@ const Input = ({ placeholder, value, onChange }) => {
           borderColor: COLORS.primaryColor
         })
       }
-      secureTextEntry={placeholder === "password" ? true : false}
+      secureTextEntry={
+        placeholder === "password" || placeholder === "password confirm"
+          ? true
+          : false
+      }
       value={value}
       onChangeText={text => onChange(text)}
     />

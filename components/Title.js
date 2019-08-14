@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontFamily: FONT.primaryFont,
     textAlign: "center",
-    marginBottom: 40
+    marginBottom: 30
   }
 });
 export default Title;

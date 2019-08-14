@@ -14,41 +14,42 @@ import Button from "../components/Button";
 import Title from "../components/Title";
 import Back from "../components/Back";
 import { COLORS } from "../constants/Global";
+//import hook
+import useInput from "../hooks/useInput";
 
 const width = Dimensions.get("window").width;
 
-const Register = () => {
+const Register = ({ navigation }) => {
   const [chooseAvatar, setchooseAvatar] = useState(false);
   const [gender, setGender] = useState(false);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-
+  const username = useInput();
+  const email = useInput();
+  const password = useInput();
+  const passwordConfirm = useInput();
   stepCreateAccount = () => {
     if (!chooseAvatar) {
       return (
         <View>
-          <Text>Enter your information</Text>
+          <Title title="Hi, new member !" />
           <Input
             placeholder="username"
-            value={username}
-            onChange={text => setUsername(text)}
+            value={username.value}
+            onChange={text => username.onChange(text)}
           />
           <Input
             placeholder="email"
-            value={email}
-            onChange={text => setEmail(text)}
+            value={email.value}
+            onChange={text => email.onChange(text)}
           />
           <Input
             placeholder="password"
-            value={password}
-            onChange={text => setPassword(text)}
+            value={password.value}
+            onChange={text => password.onChange(text)}
           />
           <Input
             placeholder="password confirm"
-            value={passwordConfirm}
-            onChange={text => setPasswordConfirm(text)}
+            value={passwordConfirm.value}
+            onChange={text => passwordConfirm.onChange(text)}
           />
           <Button text="Next" action={() => setchooseAvatar(true)} />
         </View>
@@ -56,6 +57,7 @@ const Register = () => {
     } else {
       return (
         <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Title title="Almost done !" />
           <View
             style={{
               width: width - 70,
@@ -66,7 +68,7 @@ const Register = () => {
             }}
           >
             <Back back={() => setchooseAvatar(false)} />
-            <Text>Choose your avatar</Text>
+            <Text style={{ fontSize: 20 }}>Choose your avatar</Text>
           </View>
           <TouchableOpacity
             onPress={() => setGender("male")}
@@ -117,13 +119,21 @@ const Register = () => {
         />
       );
   };
-  console.log(username, email, password, passwordConfirm, gender);
+  console.log(
+    username.value,
+    email.value,
+    password.value,
+    passwordConfirm.value,
+    gender
+  );
 
   return (
     <Container>
-      <Title title="Hi, new member !" />
       {stepCreateAccount()}
       {submitAccount()}
+      <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+        <Text>already an account ?</Text>
+      </TouchableOpacity>
     </Container>
   );
 };
