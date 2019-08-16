@@ -29,7 +29,7 @@ const Register = ({ navigation }) => {
   stepCreateAccount = () => {
     if (!chooseAvatar) {
       return (
-        <View>
+        <Container alignItems="center">
           <Title title="Hi, new member !" />
           <Input
             placeholder="username"
@@ -52,7 +52,7 @@ const Register = ({ navigation }) => {
             onChange={text => passwordConfirm.onChange(text)}
           />
           <Button text="Next" action={() => setchooseAvatar(true)} />
-        </View>
+        </Container>
       );
     } else {
       return (

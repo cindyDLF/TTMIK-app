@@ -4,18 +4,20 @@ import { Text, Image, Dimensions, View, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 //import components
-import Button from "../components/Button";
 import Container from "../components/Container";
 import Header from "../components/Header";
+import ProgressBar from "../components/ProgressBar";
 
 import { COLORS, FONT } from "../constants/Global";
 
 const width = Dimensions.get("window").width;
 
 let user = {
-  username: "Eurika",
-  email: "eurika@gmail.com",
+  username: "Cindy",
+  email: "cindy@gmail.com",
   gender: "female",
+  password: "12345678",
+  passwordConfirm: "12345678",
   level: 1,
   point: 0,
   date_register: moment().format("MMMM Do YYYY, h:mm:ss a")
@@ -49,7 +51,11 @@ const Profile = ({ navigation }) => {
           </Text>
           <TouchableOpacity
             style={{ position: "absolute", right: 0 }}
-            onPress={() => navigation.navigate("UpdateUserInfo")}
+            onPress={() =>
+              navigation.navigate("UpdateUserInfo", {
+                user
+              })
+            }
           >
             <Icon
               name="gear"
@@ -58,6 +64,7 @@ const Profile = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <Text>Start training {user.date_register}</Text>
+        <ProgressBar progress={0.46789} />
       </Container>
     </View>
   );
