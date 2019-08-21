@@ -13,8 +13,8 @@ const Container = props => (
 
 const style = StyleSheet.create({
   container: {
-    //alignItems: "center"
-    //flex: 1
+    //alignItems: "center",
+    width: "100%"
   }
 });
 

@@ -36,7 +36,7 @@ export const GET_ALL_THEMATICS = gql`
 `;
 
 export const EXERCICE_BY_ID = gql`
-  query exerciceById($id: ID!) {
+  query($id: Int!) {
     exerciceById(id: $id) {
       id
       name

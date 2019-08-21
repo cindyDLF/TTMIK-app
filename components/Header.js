@@ -15,14 +15,14 @@ const Header = ({ headerName, lvl, pt, goBack, navigation }) => {
     return (
       <View style={styles.headerBack}>
         <Back back={() => navigation.goBack()} position={true} />
-        <Title color="#fff" title={headerName} />
+        <Text style={styles.headerTitle}>{headerName}</Text>
       </View>
     );
   } else {
     return (
       <View style={styles.headerContainer}>
         <Text style={styles.text}>level {lvl}</Text>
-        <Title color="#fff" title={headerName} />
+        <Text style={styles.headerTitle}>{headerName}</Text>
         <Text style={styles.text}>{pt} point</Text>
       </View>
     );
@@ -32,6 +32,7 @@ const Header = ({ headerName, lvl, pt, goBack, navigation }) => {
 const styles = StyleSheet.create({
   headerContainer: {
     width,
+    height: 160,
     backgroundColor: COLORS.primaryColor,
     paddingTop: 60,
     padding: 30,
@@ -69,6 +70,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 18,
     fontFamily: FONT.primaryFont
+  },
+  headerTitle: {
+    color: "#fff",
+    fontSize: 30,
+    fontWeight: "bold"
   }
 });
 

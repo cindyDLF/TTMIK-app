@@ -15,6 +15,7 @@
     "apollo-link-http": "^1.5.15",
     "expo": "^34.0.1",
     "expo-constants": "^6.0.0",
+    "expo-speech": "~6.0.0",
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
     "moment": "^2.24.0",
