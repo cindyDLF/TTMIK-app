@@ -8,28 +8,6 @@ export const GET_ALL_EXERCICES = gql`
   }
 `;
 
-export const LOGIN = gql`
-  query login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      id
-      username
-      avatar
-      email
-      level
-      point
-      date_register
-      progression {
-        id
-        score
-        exercice {
-          name
-          complete_point
-        }
-      }
-    }
-  }
-`;
-
 /*export const GET_PROGRESSION = gql`
   query getProgression($userId: ID!) {
     getProgression(userId: $userId) {

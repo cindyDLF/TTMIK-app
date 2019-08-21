@@ -7,6 +7,9 @@ import {
   TouchableOpacity,
   StyleSheet
 } from "react-native";
+//graphql & call api
+import { Mutation } from "react-apollo";
+import { REGISTER } from "../actions/mutations";
 //import Components
 import Input from "../components/Input";
 import Container from "../components/Container";
@@ -21,7 +24,7 @@ const width = Dimensions.get("window").width;
 
 const Register = ({ navigation }) => {
   const [chooseAvatar, setchooseAvatar] = useState(false);
-  const [gender, setGender] = useState(false);
+  const [avatar, setAvatar] = useState("");
   const username = useInput();
   const email = useInput();
   const password = useInput();
@@ -71,22 +74,22 @@ const Register = ({ navigation }) => {
             <Text style={{ fontSize: 20 }}>Choose your avatar</Text>
           </View>
           <TouchableOpacity
-            onPress={() => setGender("male")}
+            onPress={() => setAvatar("male")}
             style={[
               styles.borderGender,
-              gender === "male" ? styles.border : styles.noneBorder
+              avatar === "male" ? styles.border : styles.noneBorder
             ]}
           >
             <Image
               style={{ width: width - 190, height: width - 190, margin: 10 }}
-              source={require("../assets/man.png")}
+              source={require("../assets/avatar/man.png")}
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setGender("female")}
+            onPress={() => setAvatar("female")}
             style={[
               styles.borderGender,
-              gender === "female" ? styles.border : styles.noneBorder
+              avatar === "female" ? styles.border : styles.noneBorder
             ]}
           >
             <Image
@@ -95,7 +98,7 @@ const Register = ({ navigation }) => {
                 height: width - 190,
                 margin: 10
               }}
-              source={require("../assets/woman.png")}
+              source={require("../assets/avatar/woman.png")}
             />
           </TouchableOpacity>
         </View>
@@ -105,27 +108,42 @@ const Register = ({ navigation }) => {
 
   submitAccount = () => {
     if (
-      username !== "" &&
-      email !== "" &&
-      password !== "" &&
-      passwordConfirm !== "" &&
-      passwordConfirm === password &&
-      gender !== false
-    )
+      username.value !== "" &&
+      email.value !== "" &&
+      password.value !== "" &&
+      passwordConfirm.value === password.value &&
+      avatar !== ""
+    ) {
       return (
-        <Button
-          text="Create your account"
-          action={() => setchooseAvatar(true)}
-        />
+        <Mutation mutation={REGISTER}>
+          {(addUser, { error, data }) => {
+            return (
+              <Button
+                text="Create your account"
+                action={async () => {
+                  try {
+                    const user = await addUser({
+                      variables: {
+                        username: username.value,
+                        email: email.value,
+                        password: password.value,
+                        avatar: avatar
+                      }
+                    });
+                    if (user) {
+                      navigation.navigate("Login");
+                    }
+                  } catch (err) {
+                    console.log("ERROR ====> please retry");
+                  }
+                }}
+              />
+            );
+          }}
+        </Mutation>
       );
+    }
   };
-  console.log(
-    username.value,
-    email.value,
-    password.value,
-    passwordConfirm.value,
-    gender
-  );
 
   return (
     <Container alignItems="center" paddingTop={50}>

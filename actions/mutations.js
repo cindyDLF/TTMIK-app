@@ -16,6 +16,28 @@ export const REGISTER = gql`
   }
 `;
 
+export const LOGIN = gql`
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password) {
+      id
+      username
+      avatar
+      email
+      level
+      point
+      date_register
+      progression {
+        id
+        score
+        exercice {
+          name
+          complete_point
+        }
+      }
+    }
+  }
+`;
+
 export const UPDATE_USER = gql`
   mutation updateUser(
     $id: ID!

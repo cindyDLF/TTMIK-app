@@ -1,5 +1,8 @@
 import React from "react";
-import { Text, Image, TouchableOpacity } from "react-native";
+import { Text, Image, TouchableOpacity, AsyncStorage } from "react-native";
+//graphql & call api
+import { Mutation } from "react-apollo";
+import { LOGIN } from "../actions/mutations";
 
 //import components
 import Container from "../components/Container";
@@ -26,7 +29,29 @@ const Login = ({ navigation }) => {
         onChange={text => password.onChange(text)}
         value={password.value}
       />
-      <Button text="Sign In" action={() => navigation.navigate("Welcome")} />
+      <Mutation mutation={LOGIN}>
+        {(login, { data }) => (
+          <Button
+            text="Sign In"
+            action={async () => {
+              try {
+                const user = await login({
+                  variables: { email: email.value, password: password.value }
+                });
+                await AsyncStorage.setItem(
+                  "@TTMIK:user",
+                  JSON.stringify(user.data.login)
+                );
+                navigation.navigate("Profile");
+                return user;
+              } catch (err) {
+                console.log("ERROR ======> wrong pawword or email");
+              }
+            }}
+          />
+        )}
+      </Mutation>
+
       <TouchableOpacity onPress={() => navigation.navigate("Register")}>
         <Text>Not already member ? </Text>
       </TouchableOpacity>
