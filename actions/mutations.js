@@ -39,18 +39,8 @@ export const LOGIN = gql`
 `;
 
 export const UPDATE_USER = gql`
-  mutation updateUser(
-    $id: ID!
-    $username: String!
-    $email: String!
-    $newPassword: String!
-  ) {
-    updateUserInfo(
-      id: $id
-      username: $username
-      email: $email
-      newPassword: $newPassword
-    ) {
+  mutation updateUser($id: Int!, $username: String!, $email: String!) {
+    updateUserInfo(id: $id, username: $username, email: $email) {
       id
       username
       avatar
@@ -58,6 +48,14 @@ export const UPDATE_USER = gql`
       level
       point
       date_register
+      progression {
+        id
+        score
+        exercice {
+          name
+          complete_point
+        }
+      }
     }
   }
 `;

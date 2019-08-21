@@ -11,6 +11,7 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import moment from "moment";
 
 //import components
+import Loading from "../components/Loading";
 import Container from "../components/Container";
 import Header from "../components/Header";
 import ProgressBar from "../components/ProgressBar";
@@ -85,7 +86,7 @@ const Profile = ({ navigation }) => {
       </View>
     );
   } else {
-    return <Title title="Loading" />;
+    return <Loading />;
   }
 };
 

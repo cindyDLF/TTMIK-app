@@ -5,6 +5,7 @@ import { Mutation } from "react-apollo";
 import { LOGIN } from "../actions/mutations";
 
 //import components
+import Loading from "../components/Loading";
 import Container from "../components/Container";
 import Button from "../components/Button";
 import Input from "../components/Input";
@@ -30,26 +31,31 @@ const Login = ({ navigation }) => {
         value={password.value}
       />
       <Mutation mutation={LOGIN}>
-        {(login, { data }) => (
-          <Button
-            text="Sign In"
-            action={async () => {
-              try {
-                const user = await login({
-                  variables: { email: email.value, password: password.value }
-                });
-                await AsyncStorage.setItem(
-                  "@TTMIK:user",
-                  JSON.stringify(user.data.login)
-                );
-                navigation.navigate("Profile");
-                return user;
-              } catch (err) {
-                console.log("ERROR ======> wrong pawword or email");
-              }
-            }}
-          />
-        )}
+        {(login, { loading }) => {
+          if (loading) {
+            return <Loading />;
+          }
+          return (
+            <Button
+              text="Sign In"
+              action={async () => {
+                try {
+                  const user = await login({
+                    variables: { email: email.value, password: password.value }
+                  });
+                  await AsyncStorage.setItem(
+                    "@TTMIK:user",
+                    JSON.stringify(user.data.login)
+                  );
+                  navigation.navigate("Profile");
+                  return user;
+                } catch (err) {
+                  console.log("ERROR ======> wrong pawword or email");
+                }
+              }}
+            />
+          );
+        }}
       </Mutation>
 
       <TouchableOpacity onPress={() => navigation.navigate("Register")}>

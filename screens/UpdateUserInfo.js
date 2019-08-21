@@ -4,8 +4,12 @@ import {
   View,
   TouchableOpacity,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  AsyncStorage
 } from "react-native";
+//graphql & call api
+import { Mutation } from "react-apollo";
+import { UPDATE_USER } from "../actions/mutations";
 
 //import Components
 import Container from "../components/Container";
@@ -16,23 +20,26 @@ import Input from "../components/Input";
 //import hooks
 import useInput from "../hooks/useInput";
 import { COLORS } from "../constants/Global";
+import Loading from "../components/Loading";
 
 const width = Dimensions.get("window").width;
 
 const UpdateUserInfo = ({ navigation }) => {
+  const user = navigation.getParam("user");
+
   const [resetPassword, setResetPassword] = useState(false);
+  const idUser = user.id;
   const username = useInput();
   const email = useInput();
   const password = useInput();
   const passwordConfirm = useInput();
 
   useEffect(() => {
-    const user = navigation.getParam("user");
     username.onChange(user.username);
     email.onChange(user.email);
     password.onChange(user.password);
     passwordConfirm.onChange(user.password);
-  });
+  }, []);
 
   switchViewInfoAccount = () => {
     if (!resetPassword) {
@@ -43,6 +50,39 @@ const UpdateUserInfo = ({ navigation }) => {
             onChange={text => username.onChange(text)}
           />
           <Input value={email.value} onChange={text => email.onChange(text)} />
+          <Mutation mutation={UPDATE_USER}>
+            {(updateUser, { loading, data }) => {
+              if (loading) {
+                return <Loading />;
+              }
+              return (
+                <Button
+                  text="Change information"
+                  action={async () => {
+                    try {
+                      const user = await updateUser({
+                        variables: {
+                          id: idUser,
+                          username: username.value,
+                          email: email.value
+                        }
+                      });
+                      console.log(user.data.UpdateUserInfo);
+                      await AsyncStorage.setItem(
+                        "@TTMIK:user",
+                        JSON.stringify(user.data)
+                      );
+                      navigation.navigate("Profile");
+
+                      return user;
+                    } catch (err) {
+                      console.log(err);
+                    }
+                  }}
+                />
+              );
+            }}
+          </Mutation>
         </View>
       );
     } else {
@@ -112,7 +152,6 @@ const UpdateUserInfo = ({ navigation }) => {
       </View>
       <Container alignItems="center" paddingTop={50}>
         {switchViewInfoAccount()}
-        <Button text="Go back" action={() => navigation.goBack()} />
       </Container>
     </View>
   );
