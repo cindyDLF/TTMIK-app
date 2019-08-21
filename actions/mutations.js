@@ -60,6 +60,12 @@ export const UPDATE_USER = gql`
   }
 `;
 
+export const UPDATE_PASSWORD = gql`
+  mutation updatePassword($id: Int!, $newPassword: String!) {
+    updatePassword(id: $id, newPassword: $newPassword)
+  }
+`;
+
 export const UPDATE_PROGRESSION = gql`
   mutation updateProgression($userId: ID!, $exerciceId: ID!, $score: Int!) {
     updateProgression(userId: $userId, exerciceId: $exerciceId, score: $score) {

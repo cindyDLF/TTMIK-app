@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text, Image, TouchableOpacity, AsyncStorage } from "react-native";
 //graphql & call api
 import { Mutation } from "react-apollo";
@@ -13,10 +13,13 @@ import Title from "../components/Title";
 
 //import hook
 import useInput from "../hooks/useInput";
+import UserContext from "../hooks/userContext";
 
 const Login = ({ navigation }) => {
   const email = useInput();
   const password = useInput();
+  const { user, setUser } = useContext(UserContext);
+
   return (
     <Container alignItems="center" paddingTop={50}>
       <Title title="TTMIK">Login</Title>
@@ -47,6 +50,7 @@ const Login = ({ navigation }) => {
                     "@TTMIK:user",
                     JSON.stringify(user.data.login)
                   );
+                  setUser(user.data.login);
                   navigation.navigate("Profile");
                   return user;
                 } catch (err) {

@@ -1,12 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  Text,
-  Image,
-  Dimensions,
-  View,
-  TouchableOpacity,
-  AsyncStorage
-} from "react-native";
+import React, { useContext } from "react";
+import { Text, Image, Dimensions, View, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import moment from "moment";
 
@@ -21,27 +14,15 @@ import { avatar } from "../assets/avatar";
 
 import { COLORS, FONT } from "../constants/Global";
 
+//import hooks
+import UserContext from "../hooks/userContext";
+
 const width = Dimensions.get("window").width;
 
 const Profile = ({ navigation }) => {
-  const [user, setUser] = useState(null);
-  useEffect(() => {
-    retrieveUser();
-  }, []);
+  //const [user, setUser] = useState(null);
+  const { user } = useContext(UserContext);
 
-  retrieveUser = async () => {
-    try {
-      const userStorage = await AsyncStorage.getItem("@TTMIK:user");
-      if (userStorage !== null) {
-        console.log(userStorage);
-        return setUser(JSON.parse(userStorage));
-      } else {
-        console.log("ERROR =====> application is in trouble");
-      }
-    } catch (err) {
-      console.log(err);
-    }
-  };
   if (user !== null) {
     return (
       <View>

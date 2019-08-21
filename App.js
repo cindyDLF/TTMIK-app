@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { AppLoading } from "expo";
 
 //import User Context
-import UserContext from "./hooks/userContext";
+import { UserProvider } from "./hooks/userContext";
+
 import Constants from "expo-constants";
 import { ApolloClient } from "apollo-client";
 import { ApolloProvider, graphql } from "react-apollo";
@@ -14,6 +15,7 @@ import Navigation from "./navigation";
 
 const App = () => {
   const [areApiLoaded, setAreApiLoaded] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     connectApi();
@@ -46,7 +48,9 @@ const App = () => {
 
   return areApiLoaded ? (
     <ApolloProvider client={this.clientGraphQL}>
-      <Navigation />
+      <UserProvider value={{ user, setUser }}>
+        <Navigation />
+      </UserProvider>
     </ApolloProvider>
   ) : (
     <AppLoading />

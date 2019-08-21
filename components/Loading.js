@@ -1,14 +1,10 @@
 import React from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import { ActivityIndicator } from "react-native";
+import { COLORS } from "../constants/Global";
 
 //import components
-const Loading = () => <ActivityIndicator size="large" color="#0000ff" />;
-
-const styles = StyleSheet.create({
-  lottie: {
-    width: 100,
-    height: 100
-  }
-});
+const Loading = () => (
+  <ActivityIndicator size="large" color={COLORS.primaryColor} />
+);
 
 export default Loading;

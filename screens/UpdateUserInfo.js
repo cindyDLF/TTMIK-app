@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   Text,
   View,
@@ -9,9 +9,10 @@ import {
 } from "react-native";
 //graphql & call api
 import { Mutation } from "react-apollo";
-import { UPDATE_USER } from "../actions/mutations";
+import { UPDATE_USER, UPDATE_PASSWORD } from "../actions/mutations";
 
 //import Components
+import Loading from "../components/Loading";
 import Container from "../components/Container";
 import Button from "../components/Button";
 import Header from "../components/Header";
@@ -19,27 +20,63 @@ import Input from "../components/Input";
 
 //import hooks
 import useInput from "../hooks/useInput";
+import UserContext from "../hooks/userContext";
+
 import { COLORS } from "../constants/Global";
-import Loading from "../components/Loading";
 
 const width = Dimensions.get("window").width;
 
 const UpdateUserInfo = ({ navigation }) => {
-  const user = navigation.getParam("user");
+  //const user = navigation.getParam("user");
+  const { user, setUser } = useContext(UserContext);
 
   const [resetPassword, setResetPassword] = useState(false);
   const idUser = user.id;
   const username = useInput();
   const email = useInput();
-  const password = useInput();
-  const passwordConfirm = useInput();
+  const [newpassword, setNewPassword] = useState("");
+  const [passwordConfirm, setPasswordConfirm] = useState("");
 
   useEffect(() => {
     username.onChange(user.username);
     email.onChange(user.email);
-    password.onChange(user.password);
-    passwordConfirm.onChange(user.password);
   }, []);
+
+  checkPasswordConfirm = () => {
+    if (
+      newpassword !== "" &&
+      passwordConfirm !== "" &&
+      newpassword === passwordConfirm
+    ) {
+      return (
+        <Mutation mutation={UPDATE_PASSWORD}>
+          {(updatePassword, { loading, data }) => {
+            if (loading) {
+              return <Loading />;
+            }
+            return (
+              <Button
+                text="Reset Password"
+                action={async () => {
+                  try {
+                    await updatePassword({
+                      variables: {
+                        id: idUser,
+                        newPassword: newpassword
+                      }
+                    });
+                    navigation.navigate("Profile");
+                  } catch (err) {
+                    console.log(err);
+                  }
+                }}
+              />
+            );
+          }}
+        </Mutation>
+      );
+    }
+  };
 
   switchViewInfoAccount = () => {
     if (!resetPassword) {
@@ -67,11 +104,11 @@ const UpdateUserInfo = ({ navigation }) => {
                           email: email.value
                         }
                       });
-                      console.log(user.data.UpdateUserInfo);
                       await AsyncStorage.setItem(
                         "@TTMIK:user",
-                        JSON.stringify(user.data)
+                        JSON.stringify(user.data.updateUserInfo)
                       );
+                      setUser(user.data.updateUserInfo);
                       navigation.navigate("Profile");
 
                       return user;
@@ -89,13 +126,16 @@ const UpdateUserInfo = ({ navigation }) => {
       return (
         <View>
           <Input
-            value={password.value}
-            onChange={text => password.onChange(text)}
+            value={newpassword}
+            onChange={text => setNewPassword(text)}
+            placeholder="password"
           />
           <Input
-            value={passwordConfirm.value}
-            onChange={text => passwordConfirm.onChange(text)}
+            value={passwordConfirm}
+            placeholder="password confirm"
+            onChange={text => setPasswordConfirm(text)}
           />
+          {checkPasswordConfirm()}
         </View>
       );
     }
