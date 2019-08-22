@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -25,15 +25,54 @@ import { EXERCICE_BY_ID } from "../actions/queries";
 
 import { COLORS, FONT } from "../constants/Global";
 
+import { shuffle } from "../utils";
+
 const height = Dimensions.get("window").height;
 
 const Exercice = ({ navigation }) => {
   const exerciceId = navigation.getParam("exerciceId");
   const { user } = useContext(UserContext);
   const [switchExercice, setSwitchExercice] = useState(false);
+  const [nextStep, setNextStep] = useState(false);
 
   _speak = kr => {
     Speech.speak(kr, { language: "ko", rate: 0.4 });
+  };
+
+  _renderChoose = arrChoose => {
+    const render = arrChoose.map((item, idx) => {
+      return (
+        <TouchableOpacity key={idx} onPress={() => setNextStep(!nextStep)}>
+          <Text>{item.rom}</Text>
+        </TouchableOpacity>
+      );
+    });
+    return render;
+  };
+
+  displayRandomItem = array => {
+    const goodItem = array[Math.floor(Math.random() * array.length)];
+    let arr = [];
+
+    while (arr.length !== 3) {
+      const item = array[Math.floor(Math.random() * array.length)];
+      if (!arr.includes(item)) {
+        arr.push(item);
+      }
+    }
+    arr.push(goodItem);
+    shuffle(arr);
+    console.log(arr);
+    return (
+      <View style={{ width: "100%", alignItems: "center" }}>
+        <View style={[styles.cardContainer, { width: "45%" }]}>
+          <Text>{goodItem.kr}</Text>
+        </View>
+        <View style={{ display: "flex", flexDirection: "row" }}>
+          {_renderChoose(arr)}
+        </View>
+      </View>
+    );
   };
 
   _displayBtnExercice = () => {
@@ -48,6 +87,7 @@ const Exercice = ({ navigation }) => {
       );
     }
   };
+
   return (
     <Container>
       <Query query={EXERCICE_BY_ID} variables={{ id: exerciceId }}>
@@ -82,7 +122,13 @@ const Exercice = ({ navigation }) => {
               });
               return cardLesson;
             } else {
-              return <Text>Exercice</Text>;
+              return (
+                <View style={{ width: "100%", alignItems: "center" }}>
+                  <Text>Exercice</Text>
+
+                  {displayRandomItem(data.exerciceById.data)}
+                </View>
+              );
             }
           };
 

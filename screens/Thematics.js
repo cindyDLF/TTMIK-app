@@ -4,8 +4,10 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Dimensions
 } from "react-native";
+import Carousel from "react-native-snap-carousel";
 
 //graphql & call api
 import { Query } from "react-apollo";
@@ -21,23 +23,44 @@ import Header from "../components/Header";
 
 import { FONT, COLORS } from "../constants/Global";
 
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
+
 const Thematics = ({ navigation }) => {
   const { user } = useContext(UserContext);
+
+  _renderItem = ({ item, index }) => {
+    return (
+      <TouchableOpacity
+        key={item.id}
+        style={styles.cardContainer}
+        onPress={() =>
+          navigation.navigate("ExercicesList", {
+            exercicesList: item.exercice,
+            thematicName: item.name
+          })
+        }
+      >
+        <Text style={styles.textCard}>{item.name}</Text>
+      </TouchableOpacity>
+    );
+  };
   return (
     <View>
       <Header headerName="Training" lvl={user.level} pt={user.point} />
       <Container alignItems="flex-start" paddingTop={30}>
-        <ScrollView style={{ width: "100%", height: "100%" }}>
-          <Query query={GET_ALL_THEMATICS} fetchPolicy="cache-and-network">
-            {({ data, loading }) => {
-              if (loading) {
-                return (
-                  <View>
-                    <Loading />
-                  </View>
-                );
-              }
-              const thematicCard = data.allThematic.map(thematic => (
+        <Query query={GET_ALL_THEMATICS} fetchPolicy="cache-and-network">
+          {({ data, loading }) => {
+            if (loading) {
+              return (
+                <View>
+                  <Loading />
+                </View>
+              );
+            }
+
+            const thematicCard = data.allThematic.map(thematic => {
+              return (
                 <TouchableOpacity
                   style={styles.cardContainer}
                   key={thematic.id}
@@ -50,11 +73,24 @@ const Thematics = ({ navigation }) => {
                 >
                   <Text style={styles.textCard}>{thematic.name}</Text>
                 </TouchableOpacity>
-              ));
-              return thematicCard;
-            }}
-          </Query>
-        </ScrollView>
+              );
+            });
+            return (
+              <Carousel
+                ref={c => {
+                  this._carousel = c;
+                }}
+                data={data.allThematic}
+                renderItem={_renderItem}
+                sliderWidth={width}
+                itemWidth={width - 50}
+                sliderHeight={height}
+                itemHeight={height}
+                activeAnimationType="spring"
+              />
+            );
+          }}
+        </Query>
       </Container>
     </View>
   );
@@ -62,10 +98,11 @@ const Thematics = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    width: "40%",
-    height: 150,
+    height: width - 80,
+    width: width - 80,
     borderRadius: 10,
     marginLeft: "5%",
+    marginBottom: 20,
     backgroundColor: COLORS.secondaryColor,
     alignItems: "center",
     justifyContent: "center",
