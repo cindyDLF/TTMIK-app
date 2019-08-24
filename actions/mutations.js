@@ -30,6 +30,7 @@ export const LOGIN = gql`
         id
         score
         exercice {
+          id
           name
           complete_point
         }
@@ -52,6 +53,7 @@ export const UPDATE_USER = gql`
         id
         score
         exercice {
+          id
           name
           complete_point
         }
@@ -71,22 +73,80 @@ export const UPDATE_PROGRESSION = gql`
     updateProgression(userId: $userId, exerciceId: $exerciceId, score: $score) {
       id
       score
+      exercice {
+        complete_point
+        id
+        name
+      }
     }
   }
 `;
 
 export const UPDATE_POINT = gql`
-  mutation updatePoint($id: ID!, $point: In!) {
+  mutation updatePoint($id: Int!, $point: Int!) {
     updatePoint(id: $id, point: $point) {
+      id
+      username
+      avatar
+      email
+      level
       point
+      date_register
+      progression {
+        id
+        score
+        exercice {
+          id
+          name
+          complete_point
+        }
+      }
     }
   }
 `;
 
 export const UPDATE_LEVEL = gql`
-  mutation updateLevel($id: ID!, $level: Int!) {
+  mutation updateLevel($id: Int!, $level: Int!) {
     updateLevel(id: $id, level: $level) {
       level
+    }
+  }
+`;
+
+export const EXERCICE_END = gql`
+  mutation updateExerciceEnd(
+    $id: Int!
+    $point: Int!
+    $userId: ID!
+    $exerciceId: ID!
+    $score: Int!
+  ) {
+    updatePoint(id: $id, point: $point) {
+      id
+      username
+      avatar
+      email
+      level
+      point
+      date_register
+      progression {
+        id
+        score
+        exercice {
+          id
+          name
+          complete_point
+        }
+      }
+    }
+    updateProgression(userId: $userId, exerciceId: $exerciceId, score: $score) {
+      id
+      score
+      exercice {
+        complete_point
+        id
+        name
+      }
     }
   }
 `;

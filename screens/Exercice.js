@@ -9,12 +9,14 @@ import {
   Dimensions
 } from "react-native";
 import * as Speech from "expo-speech";
+import * as Animatable from "react-native-animatable";
 
 //import Components
 import Loading from "../components/Loading";
 import Header from "../components/Header";
 import Container from "../components/Container";
 import Button from "../components/Button";
+import Modal from "../components/Modal";
 
 //import hooks
 import UserContext from "../hooks/userContext";
@@ -33,46 +35,68 @@ const Exercice = ({ navigation }) => {
   const exerciceId = navigation.getParam("exerciceId");
   const { user } = useContext(UserContext);
   const [switchExercice, setSwitchExercice] = useState(false);
-  const [nextStep, setNextStep] = useState(false);
+  const [dataExercice, setDataExercice] = useState(null);
+  const [goodItem, setGoodItem] = useState(null);
+  const [randomItem, setRandomItem] = useState(null);
+  const [completeStep, setCompleteStep] = useState(null);
+  const [step, setStep] = useState(0);
+  const [userPoint, setUserPoint] = useState(0);
+  const [responseSentence, setResponseSentence] = useState("");
 
   _speak = kr => {
     Speech.speak(kr, { language: "ko", rate: 0.4 });
   };
 
-  _renderChoose = arrChoose => {
-    const render = arrChoose.map((item, idx) => {
-      return (
-        <TouchableOpacity key={idx} onPress={() => setNextStep(!nextStep)}>
-          <Text>{item.rom}</Text>
-        </TouchableOpacity>
-      );
-    });
-    return render;
+  _renderChoose = () => {
+    if (randomItem !== null) {
+      const render = randomItem.map((item, idx) => {
+        return (
+          <TouchableOpacity key={idx} onPress={() => checkResponse(item)}>
+            <Text>{item.rom}</Text>
+          </TouchableOpacity>
+        );
+      });
+      return render;
+    } else {
+      return <Loading />;
+    }
+  };
+
+  getData = data => {
+    setDataExercice(data.data);
+    setCompleteStep(data.step);
+    displayRandomItem(data.data);
+  };
+
+  checkResponse = item => {
+    if (step <= completeStep) {
+      if (item.kr === goodItem.kr) {
+        setUserPoint(userPoint + 5);
+        setResponseSentence("Good response +5");
+      } else {
+        setResponseSentence("");
+      }
+      setStep(step + 1);
+      displayRandomItem(dataExercice);
+    }
   };
 
   displayRandomItem = array => {
-    const goodItem = array[Math.floor(Math.random() * array.length)];
+    const setgooditem = array[Math.floor(Math.random() * array.length)];
+    setGoodItem(setgooditem);
+
     let arr = [];
 
-    while (arr.length !== 3) {
+    arr.push(setgooditem);
+
+    while (arr.length !== 4) {
       const item = array[Math.floor(Math.random() * array.length)];
       if (!arr.includes(item)) {
         arr.push(item);
       }
     }
-    arr.push(goodItem);
-    shuffle(arr);
-    console.log(arr);
-    return (
-      <View style={{ width: "100%", alignItems: "center" }}>
-        <View style={[styles.cardContainer, { width: "45%" }]}>
-          <Text>{goodItem.kr}</Text>
-        </View>
-        <View style={{ display: "flex", flexDirection: "row" }}>
-          {_renderChoose(arr)}
-        </View>
-      </View>
-    );
+
+    setRandomItem(shuffle(arr));
   };
 
   _displayBtnExercice = () => {
@@ -90,7 +114,11 @@ const Exercice = ({ navigation }) => {
 
   return (
     <Container>
-      <Query query={EXERCICE_BY_ID} variables={{ id: exerciceId }}>
+      <Query
+        query={EXERCICE_BY_ID}
+        variables={{ id: exerciceId }}
+        onCompleted={data => getData(data.exerciceById)}
+      >
         {({ data, loading }) => {
           if (loading) {
             return <Loading />;
@@ -98,47 +126,62 @@ const Exercice = ({ navigation }) => {
 
           displayExercice = () => {
             if (!switchExercice) {
-              const cardLesson = data.exerciceById.data.map((item, idx) => {
-                return (
-                  <TouchableOpacity
-                    key={idx}
-                    style={styles.cardContainer}
-                    onPress={() => _speak(item.kr)}
-                  >
-                    <Image
-                      source={require("../assets/megaphone.png")}
-                      style={{
-                        width: 25,
-                        height: 25,
-                        position: "absolute",
-                        right: 10,
-                        top: 10
-                      }}
-                    />
-                    <Text style={styles.letterKr}>{item.kr}</Text>
-                    <Text>{item.rom}</Text>
-                  </TouchableOpacity>
-                );
-              });
-              return cardLesson;
+              if (dataExercice !== null) {
+                const cardLesson = dataExercice.map((item, idx) => {
+                  return (
+                    <TouchableOpacity
+                      key={idx}
+                      style={styles.cardContainer}
+                      onPress={() => _speak(item.kr)}
+                    >
+                      <Image
+                        source={require("../assets/megaphone.png")}
+                        style={{
+                          width: 25,
+                          height: 25,
+                          position: "absolute",
+                          right: 10,
+                          top: 10
+                        }}
+                      />
+                      <Text style={styles.letterKr}>{item.kr}</Text>
+                      <Text>{item.rom}</Text>
+                    </TouchableOpacity>
+                  );
+                });
+                return cardLesson;
+              } else {
+                <Loading />;
+              }
             } else {
-              return (
-                <View style={{ width: "100%", alignItems: "center" }}>
-                  <Text>Exercice</Text>
+              if (dataExercice !== null) {
+                return (
+                  <View style={{ width: "100%", alignItems: "center" }}>
+                    <Text>Exercice</Text>
 
-                  {displayRandomItem(data.exerciceById.data)}
-                </View>
-              );
+                    <View style={{ width: "100%", alignItems: "center" }}>
+                      <View style={[styles.cardContainer, { width: "45%" }]}>
+                        <Text>{goodItem.kr}</Text>
+                      </View>
+                      {_renderChoose()}
+                    </View>
+                    <Text>{responseSentence}</Text>
+                  </View>
+                );
+              } else {
+                <Loading />;
+              }
             }
           };
-
           return (
             <View>
-              <Header
-                headerName={data.exerciceById.name}
-                lvl={user.level}
-                pt={user.point}
-              />
+              {step !== 10 ? (
+                <Header
+                  headerName={data.exerciceById.name}
+                  lvl={user.level}
+                  pt={user.point}
+                />
+              ) : null}
 
               <ScrollView
                 style={{
@@ -148,6 +191,11 @@ const Exercice = ({ navigation }) => {
                 <View style={styles.card}>{displayExercice()}</View>
               </ScrollView>
               {_displayBtnExercice()}
+              <Animatable.View>
+                {step === 10 ? (
+                  <Modal point={userPoint} exerciceId={data.exerciceById.id} />
+                ) : null}
+              </Animatable.View>
             </View>
           );
         }}

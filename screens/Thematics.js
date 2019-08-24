@@ -59,22 +59,22 @@ const Thematics = ({ navigation }) => {
               );
             }
 
-            const thematicCard = data.allThematic.map(thematic => {
-              return (
-                <TouchableOpacity
-                  style={styles.cardContainer}
-                  key={thematic.id}
-                  onPress={() =>
-                    navigation.navigate("ExercicesList", {
-                      exercicesList: thematic.exercice,
-                      thematicName: thematic.name
-                    })
-                  }
-                >
-                  <Text style={styles.textCard}>{thematic.name}</Text>
-                </TouchableOpacity>
-              );
-            });
+            // const thematicCard = data.allThematic.map(thematic => {
+            //   return (
+            //     <TouchableOpacity
+            //       style={styles.cardContainer}
+            //       key={thematic.id}
+            //       onPress={() =>
+            //         navigation.navigate("ExercicesList", {
+            //           exercicesList: thematic.exercice,
+            //           thematicName: thematic.name
+            //         })
+            //       }
+            //     >
+            //       <Text style={styles.textCard}>{thematic.name}</Text>
+            //     </TouchableOpacity>
+            //   );
+            // });
             return (
               <Carousel
                 ref={c => {

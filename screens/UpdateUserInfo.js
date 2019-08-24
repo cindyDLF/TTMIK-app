@@ -167,7 +167,6 @@ const UpdateUserInfo = ({ navigation }) => {
               !resetPassword ? { color: "#fff" } : { color: "#000" }
             ]}
           >
-            {" "}
             your information
           </Text>
         </TouchableOpacity>

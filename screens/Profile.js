@@ -16,6 +16,7 @@ import { COLORS, FONT } from "../constants/Global";
 
 //import hooks
 import UserContext from "../hooks/userContext";
+import ProgressionContext from "../hooks/progressionContext";
 
 const width = Dimensions.get("window").width;
 

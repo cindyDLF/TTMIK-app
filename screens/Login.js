@@ -14,11 +14,13 @@ import Title from "../components/Title";
 //import hook
 import useInput from "../hooks/useInput";
 import UserContext from "../hooks/userContext";
+import ProgressionContext from "../hooks/progressionContext";
 
 const Login = ({ navigation }) => {
-  const email = useInput();
-  const password = useInput();
+  const email = useInput("Eurika@gmail.com");
+  const password = useInput("1234567");
   const { user, setUser } = useContext(UserContext);
+  const { progression, setProgression } = useContext(ProgressionContext);
 
   return (
     <Container alignItems="center" paddingTop={50}>
@@ -50,7 +52,14 @@ const Login = ({ navigation }) => {
                     "@TTMIK:user",
                     JSON.stringify(user.data.login)
                   );
+                  await AsyncStorage.setItem(
+                    "@TTMIK:progression",
+                    JSON.stringify(user.data.login.progression)
+                  );
+
                   setUser(user.data.login);
+                  setProgression(user.data.login.progression);
+
                   navigation.navigate("Profile");
                   return user;
                 } catch (err) {

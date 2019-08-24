@@ -3,6 +3,7 @@ import { AppLoading } from "expo";
 
 //import User Context
 import { UserProvider } from "./hooks/userContext";
+import { ProgressionProvider } from "./hooks/progressionContext";
 
 import Constants from "expo-constants";
 import { ApolloClient } from "apollo-client";
@@ -16,6 +17,7 @@ import Navigation from "./navigation";
 const App = () => {
   const [areApiLoaded, setAreApiLoaded] = useState(false);
   const [user, setUser] = useState(null);
+  const [progression, setProgression] = useState(null);
 
   useEffect(() => {
     connectApi();
@@ -49,7 +51,9 @@ const App = () => {
   return areApiLoaded ? (
     <ApolloProvider client={this.clientGraphQL}>
       <UserProvider value={{ user, setUser }}>
-        <Navigation />
+        <ProgressionProvider value={{ progression, setProgression }}>
+          <Navigation />
+        </ProgressionProvider>
       </UserProvider>
     </ApolloProvider>
   ) : (
