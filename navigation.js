@@ -7,6 +7,7 @@ import {
 } from "react-navigation";
 
 //import screens
+import Auth from "./screens/Auth";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Welcome from "./screens/Welcome";
@@ -21,9 +22,8 @@ import ExerciceEnd from "./screens/ExerciceEnd";
 
 const LoginNavigator = createSwitchNavigator(
   {
-    Login: {
-      screen: Login
-    },
+    Auth: { screen: Auth },
+    Login: { screen: Login },
     Register: { screen: Register }
   },
   {

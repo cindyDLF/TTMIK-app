@@ -6,7 +6,7 @@ export const COLORS = {
 };
 
 export const FONT = {
-  primaryFont: "Helvetica-Bold"
+  primaryFont: "Roboto-Black"
 };
 
 export const SIZE = {
