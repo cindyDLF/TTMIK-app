@@ -8,18 +8,18 @@ import ProgressionContext from "../hooks/progressionContext";
 import * as Font from "expo-font";
 
 const Auth = ({ navigation }) => {
-  const { user, setUser } = useContext(UserContext);
-  const { progression, setProgression } = useContext(ProgressionContext);
+  const { setUser } = useContext(UserContext);
+  const { setProgression } = useContext(ProgressionContext);
 
   useEffect(() => {
-    Font.loadAsync({
-      "Roboto-Black": require("../assets/fonts/Roboto-Black.ttf")
-    });
     checkConntetionUser();
   }, []);
 
   checkConntetionUser = async () => {
     try {
+      await Font.loadAsync({
+        "Roboto-Black": require("../assets/fonts/Roboto-Black.ttf")
+      });
       const userStorage = await AsyncStorage.getItem("@TTMIK:user");
       console.log(JSON.parse(userStorage));
       const progressionStorage = await AsyncStorage.getItem(

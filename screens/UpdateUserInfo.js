@@ -157,36 +157,22 @@ const UpdateUserInfo = ({ navigation }) => {
             styles.btnSwitch,
             !resetPassword
               ? { backgroundColor: COLORS.primaryColor, color: "#fff" }
-              : { backgroundColor: COLORS.secondaryColor, color: "#000" }
+              : { backgroundColor: COLORS.progressColor, color: "#fff" }
           ]}
           onPress={() => setResetPassword(false)}
         >
-          <Text
-            style={[
-              styles.btnSwitchText,
-              !resetPassword ? { color: "#fff" } : { color: "#000" }
-            ]}
-          >
-            your information
-          </Text>
+          <Text style={[styles.btnSwitchText]}>your information</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
             styles.btnSwitch,
             resetPassword
               ? { backgroundColor: COLORS.primaryColor, color: "#fff" }
-              : { backgroundColor: COLORS.secondaryColor, color: "#000" }
+              : { backgroundColor: COLORS.progressColor, color: "#fff" }
           ]}
           onPress={() => setResetPassword(true)}
         >
-          <Text
-            style={[
-              styles.btnSwitchText,
-              !resetPassword ? { color: "#000" } : { color: "#fff" }
-            ]}
-          >
-            reset your password
-          </Text>
+          <Text style={[styles.btnSwitchText]}>reset your password</Text>
         </TouchableOpacity>
       </View>
       <Container alignItems="center" paddingTop={50}>

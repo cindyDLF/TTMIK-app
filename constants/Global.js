@@ -2,7 +2,7 @@ export const COLORS = {
   primaryColor: "#030c50",
   secondaryColor: "#FAEBEB",
   mainColor: "#8dd0ef",
-  progressColor: "#8DA5C8"
+  progressColor: "#1695D4"
 };
 
 export const FONT = {

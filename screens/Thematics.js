@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginLeft: "5%",
     marginBottom: 20,
-    backgroundColor: COLORS.secondaryColor,
+    backgroundColor: COLORS.progressColor,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: "#000",
@@ -116,7 +116,8 @@ const styles = StyleSheet.create({
   },
   textCard: {
     fontSize: 25,
-    fontFamily: FONT.primaryFont
+    fontFamily: FONT.primaryFont,
+    color: "#fff"
   }
 });
 

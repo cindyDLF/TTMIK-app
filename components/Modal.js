@@ -9,11 +9,15 @@ import { Mutation } from "react-apollo";
 import { EXERCICE_END } from "../actions/mutations";
 //import components
 import Loading from "./Loading";
+import ModalNextLevel from "./ModalNextLevel";
+
+import { calcPtLevel } from "../utils";
 
 const Modal = ({ point, exerciceId }) => {
   const { user, setUser } = useContext(UserContext);
   const { progression, setProgression } = useContext(ProgressionContext);
   const [canUpdate, setCanUpdate] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   _calcPointUser = (oldPoint, exercicePoint) => {
     return oldPoint + exercicePoint;
@@ -32,9 +36,10 @@ const Modal = ({ point, exerciceId }) => {
     return id;
   };
 
-  updateStorage = data => {
-    console.log("test-");
-    AsyncStorage.getItem("@TTMIK:progression").then(value => {
+  const ptLevel = calcPtLevel(user.level);
+
+  updateStorage = async data => {
+    await AsyncStorage.getItem("@TTMIK:progression").then(value => {
       let progressions = JSON.parse(value);
       const oneProgression = progressions.findIndex(
         item => item.id === data.updateProgression.id
@@ -82,6 +87,9 @@ const Modal = ({ point, exerciceId }) => {
                 <Text>je suis une modal</Text>
               </Animatable.View>
               <Text>cooucou</Text>
+              {user.point >= ptLevel ? (
+                <ModalNextLevel visible={visible} />
+              ) : null}
             </View>
           );
         }}

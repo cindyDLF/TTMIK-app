@@ -3,6 +3,8 @@ import { Text, Image, Dimensions, View, TouchableOpacity } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import moment from "moment";
 
+import { calcPtLevel, calcRank } from "../utils";
+
 //import components
 import Loading from "../components/Loading";
 import Container from "../components/Container";
@@ -23,6 +25,9 @@ const width = Dimensions.get("window").width;
 const Profile = ({ navigation }) => {
   //const [user, setUser] = useState(null);
   const { user } = useContext(UserContext);
+
+  const ptLevel = calcPtLevel(user.level);
+  const rankLevel = calcRank(user.point, ptLevel);
 
   if (user !== null) {
     return (
@@ -63,7 +68,7 @@ const Profile = ({ navigation }) => {
           <Text>
             Start training {moment(user.date_register).format("MM/DD/YYYY")}
           </Text>
-          <ProgressBar progress={0.46789} />
+          <ProgressBar progress={rankLevel} />
         </Container>
       </View>
     );

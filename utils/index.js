@@ -1,5 +1,7 @@
 import { AsyncStorage } from "react-native";
 
+const baseRankLevel = 150;
+
 export const retrieveUser = async () => {
   try {
     const userStorage = await AsyncStorage.getItem("@TTMIK:user");
@@ -31,3 +33,6 @@ export const shuffle = arra1 => {
   }
   return arra1;
 };
+
+export const calcPtLevel = level => level * baseRankLevel;
+export const calcRank = (pt, ptLevel) => pt / ptLevel;

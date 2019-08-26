@@ -108,7 +108,22 @@ export const UPDATE_POINT = gql`
 export const UPDATE_LEVEL = gql`
   mutation updateLevel($id: Int!, $level: Int!) {
     updateLevel(id: $id, level: $level) {
+      id
+      username
+      avatar
+      email
       level
+      point
+      date_register
+      progression {
+        id
+        score
+        exercice {
+          id
+          name
+          complete_point
+        }
+      }
     }
   }
 `;

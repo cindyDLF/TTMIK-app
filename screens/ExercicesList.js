@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 80,
     marginTop: 40,
-    backgroundColor: COLORS.secondaryColor,
+    backgroundColor: COLORS.progressColor,
     alignItems: "flex-start",
     justifyContent: "center",
     shadowColor: "#000",
@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
   textCard: {
     fontSize: 25,
     fontFamily: FONT.primaryFont,
-    marginLeft: 20
+    marginLeft: 20,
+    color: "#fff"
   }
 });
 export default ExercicesList;
