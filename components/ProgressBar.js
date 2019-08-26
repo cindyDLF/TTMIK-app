@@ -6,7 +6,7 @@ import { COLORS, SIZE } from "../constants/Global";
 
 const width = Dimensions.get("window").width;
 
-const ProgressBar = ({ progress }) => (
+const ProgressBar = ({ progress, indeterminateAnimationDuration }) => (
   <Progress.Bar
     progress={progress}
     width={width - 100}
@@ -15,6 +15,10 @@ const ProgressBar = ({ progress }) => (
     animated={true}
     color={COLORS.progressColor}
     borderWidth={3}
+    borderRadius={10}
+    indeterminateAnimationDuration={
+      !indeterminateAnimationDuration ? null : indeterminateAnimationDuration
+    }
   />
 );
 

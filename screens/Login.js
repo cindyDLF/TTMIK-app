@@ -24,7 +24,7 @@ const Login = ({ navigation }) => {
 
   return (
     <Container alignItems="center" paddingTop={50}>
-      <Title title="TTMIK">Login</Title>
+      <Title title="TTMIK" />
       <Input
         placeholder="email"
         onChange={text => email.onChange(text)}

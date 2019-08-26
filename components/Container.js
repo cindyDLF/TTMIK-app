@@ -6,7 +6,11 @@ const Container = props => (
     {...props}
     style={[
       style.container,
-      { paddingTop: props.paddingTop, alignItems: props.alignItems }
+      {
+        paddingTop: props.paddingTop,
+        alignItems: props.alignItems,
+        justifyContent: props.justifyContent
+      }
     ]}
   />
 );

@@ -11,8 +11,6 @@ import * as Progress from "react-native-progress";
 
 //import Components
 import Container from "../components/Container";
-import Title from "../components/Title";
-
 import Header from "../components/Header";
 
 //import hooks
@@ -103,7 +101,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
     fontFamily: FONT.primaryFont,
-    color: "#fff"
+    color: COLORS.secondaryColor
   }
 });
 

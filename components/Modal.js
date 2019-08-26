@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, AsyncStorage } from "react-native";
+import { View, Text, StyleSheet, AsyncStorage, Dimensions } from "react-native";
 import * as Animatable from "react-native-animatable";
 //import hooks
 import UserContext from "../hooks/userContext";
@@ -8,16 +8,20 @@ import ProgressionContext from "../hooks/progressionContext";
 import { Mutation } from "react-apollo";
 import { EXERCICE_END } from "../actions/mutations";
 //import components
+import Title from "./Title";
 import Loading from "./Loading";
 import ModalNextLevel from "./ModalNextLevel";
+import ProgressBar from "./ProgressBar";
 
-import { calcPtLevel } from "../utils";
+import { calcPtLevel, calcRank } from "../utils";
+
+const width = Dimensions.get("window").width;
 
 const Modal = ({ point, exerciceId }) => {
   const { user, setUser } = useContext(UserContext);
   const { progression, setProgression } = useContext(ProgressionContext);
   const [canUpdate, setCanUpdate] = useState(true);
-  const [visible, setVisible] = useState(false);
+  const [visible] = useState(false);
 
   _calcPointUser = (oldPoint, exercicePoint) => {
     return oldPoint + exercicePoint;
@@ -25,6 +29,9 @@ const Modal = ({ point, exerciceId }) => {
   _calcScore = (oldScore, point) => {
     return oldScore + point;
   };
+
+  const ptLevel = calcPtLevel(user.level);
+  const rankLevel = calcRank(user.point, ptLevel);
 
   findProgression = array => {
     let id;
@@ -35,8 +42,6 @@ const Modal = ({ point, exerciceId }) => {
     });
     return id;
   };
-
-  const ptLevel = calcPtLevel(user.level);
 
   updateStorage = async data => {
     await AsyncStorage.getItem("@TTMIK:progression").then(value => {
@@ -59,50 +64,63 @@ const Modal = ({ point, exerciceId }) => {
       setCanUpdate(false);
     });
   };
+  if (point !== 0) {
+    return (
+      <View>
+        <Mutation
+          mutation={EXERCICE_END}
+          onCompleted={data => canUpdate && updateStorage(data)}
+        >
+          {updateExerciceEnd => {
+            const pointTot = _calcPointUser(user.point, point);
 
-  return (
-    <View>
-      <Mutation
-        mutation={EXERCICE_END}
-        onCompleted={data => canUpdate && updateStorage(data)}
-      >
-        {updateExerciceEnd => {
-          const pointTot = _calcPointUser(user.point, point);
+            const oldScore = findProgression(progression);
+            const score = _calcScore(oldScore, point);
+            updateExerciceEnd({
+              variables: {
+                id: user.id,
+                point: pointTot,
+                userId: user.id,
+                exerciceId: exerciceId,
+                score: score
+              }
+            });
 
-          const oldScore = findProgression(progression);
-          const score = _calcScore(oldScore, point);
-          updateExerciceEnd({
-            variables: {
-              id: user.id,
-              point: pointTot,
-              userId: user.id,
-              exerciceId: exerciceId,
-              score: score
-            }
-          });
-
-          return (
-            <View>
-              <Animatable.View style={styles.container} animation="slideInUp">
-                <Text>je suis une modal</Text>
-              </Animatable.View>
-              <Text>cooucou</Text>
-              {user.point >= ptLevel ? (
-                <ModalNextLevel visible={visible} />
-              ) : null}
-            </View>
-          );
-        }}
-      </Mutation>
-    </View>
-  );
+            return (
+              <View>
+                <Animatable.View style={styles.container} animation="bounceIn">
+                  <View style={{ alignItems: "center", width }}>
+                    <Title title="You Win" />
+                    <Text>+ {point} points</Text>
+                    <ProgressBar progress={rankLevel} />
+                  </View>
+                </Animatable.View>
+                {user.point >= ptLevel ? (
+                  <ModalNextLevel visible={visible} />
+                ) : null}
+              </View>
+            );
+          }}
+        </Mutation>
+      </View>
+    );
+  } else {
+    return (
+      <Animatable.View style={styles.container} animation="bounceIn">
+        <View style={{ alignItems: "center", width }}>
+          <Text>Bad</Text>
+        </View>
+      </Animatable.View>
+    );
+  }
 };
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
+    width,
     height: "100%",
-    backgroundColor: "#fff"
+    backgroundColor: "#fff",
+    alignItems: "center"
   }
 });
 

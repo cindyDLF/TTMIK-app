@@ -4,7 +4,11 @@ import { COLORS } from "../constants/Global";
 
 //import components
 const Loading = () => (
-  <ActivityIndicator size="large" color={COLORS.primaryColor} />
+  <ActivityIndicator
+    style={{ display: "flex", justifyContent: "center" }}
+    size="large"
+    color={COLORS.primaryColor}
+  />
 );
 
 export default Loading;

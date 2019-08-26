@@ -10,13 +10,14 @@ import {
 } from "react-native";
 import * as Speech from "expo-speech";
 import * as Animatable from "react-native-animatable";
+import * as Progress from "react-native-progress";
 
 //import Components
 import Loading from "../components/Loading";
 import Header from "../components/Header";
 import Container from "../components/Container";
-import Button from "../components/Button";
 import Modal from "../components/Modal";
+import Title from "../components/Title";
 
 //import hooks
 import UserContext from "../hooks/userContext";
@@ -30,6 +31,7 @@ import { COLORS, FONT } from "../constants/Global";
 import { shuffle } from "../utils";
 
 const height = Dimensions.get("window").height;
+const width = Dimensions.get("window").width;
 
 const Exercice = ({ navigation }) => {
   const exerciceId = navigation.getParam("exerciceId");
@@ -51,8 +53,12 @@ const Exercice = ({ navigation }) => {
     if (randomItem !== null) {
       const render = randomItem.map((item, idx) => {
         return (
-          <TouchableOpacity key={idx} onPress={() => checkResponse(item)}>
-            <Text>{item.rom}</Text>
+          <TouchableOpacity
+            style={styles.choose}
+            key={idx}
+            onPress={() => checkResponse(item)}
+          >
+            <Text style={styles.titleExercice}>{item.rom}</Text>
           </TouchableOpacity>
         );
       });
@@ -74,7 +80,7 @@ const Exercice = ({ navigation }) => {
         setUserPoint(userPoint + 5);
         setResponseSentence("Good response +5");
       } else {
-        setResponseSentence("");
+        setResponseSentence("Bad response");
       }
       setStep(step + 1);
       displayRandomItem(dataExercice);
@@ -155,18 +161,53 @@ const Exercice = ({ navigation }) => {
               }
             } else {
               if (dataExercice !== null) {
+                console.log(step / 10);
                 return (
-                  <View style={{ width: "100%", alignItems: "center" }}>
-                    <Text>Exercice</Text>
+                  <Container
+                    paddingTop={40}
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <Text style={styles.titleExercice}>
+                      Choose the right response
+                    </Text>
+                    <Progress.Bar
+                      progress={step / 10}
+                      width={width - 60}
+                      color="#fff"
+                      unfilledColor={COLORS.progressColor}
+                      borderColor={COLORS.progressColor}
+                      borderWidth={3}
+                      height={10}
+                      borderRadius={10}
+                      style={{ marginTop: 50 }}
+                    />
 
-                    <View style={{ width: "100%", alignItems: "center" }}>
+                    <View
+                      style={{
+                        width: "100%",
+                        alignItems: "center",
+                        marginTop: 40
+                      }}
+                    >
                       <View style={[styles.cardContainer, { width: "45%" }]}>
-                        <Text>{goodItem.kr}</Text>
+                        <Text style={styles.letterKr}>{goodItem.kr}</Text>
                       </View>
-                      {_renderChoose()}
+                      <View style={styles.chooseContainer}>
+                        {_renderChoose()}
+                      </View>
                     </View>
-                    <Text>{responseSentence}</Text>
-                  </View>
+                    <Text
+                      style={[
+                        { marginTop: 40 },
+                        responseSentence === "Bad response"
+                          ? { color: "#D60100" }
+                          : { color: "#14A431" }
+                      ]}
+                    >
+                      {responseSentence}
+                    </Text>
+                  </Container>
                 );
               } else {
                 <Loading />;
@@ -238,7 +279,7 @@ const styles = StyleSheet.create({
   btnGotIt: {
     position: "absolute",
     top: height - 150,
-    backgroundColor: COLORS.primaryColor,
+    backgroundColor: COLORS.progressColor,
     width: "100%",
     padding: 20,
     justifyContent: "center",
@@ -246,6 +287,19 @@ const styles = StyleSheet.create({
   },
   textBtnGotIt: {
     color: "#fff",
+    fontFamily: FONT.primaryFont,
+    fontSize: 20
+  },
+  chooseContainer: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop: 30
+  },
+  choose: {
+    padding: 10,
+    margin: 20
+  },
+  titleExercice: {
     fontFamily: FONT.primaryFont,
     fontSize: 20
   }

@@ -36,3 +36,4 @@ export const shuffle = arra1 => {
 
 export const calcPtLevel = level => level * baseRankLevel;
 export const calcRank = (pt, ptLevel) => pt / ptLevel;
+export const calcDiff = (pt, ptLevel) => pt - ptLevel;
