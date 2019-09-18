@@ -24,9 +24,9 @@ Vous pouvez dès à présent naviguer sur l'application à l'aide du simulator :
 
 ### Outils
 
-L'application est développé avec React Native.
+L'application est développé avec **React Native**.
 
-Les données sont récupérées grâce à GraphQL, d'une API que j'ai également développé [TTMIK-api](https://github.com/cindyDLF/TTMIK-api)
+Les données sont récupérées grâce à **GraphQL**, d'une API que j'ai également développé [TTMIK-api](https://github.com/cindyDLF/TTMIK-api)
 
 ## Authors
 
