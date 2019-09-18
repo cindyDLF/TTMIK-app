@@ -2,7 +2,7 @@
 
 Application mobile pour le soutien à l'apprentissage de la langue coréenne.
 
-L'application propose du contenu de cours ainsi que des exercice pratique.
+L'application propose du contenu de cours ainsi que des exercices pratiques.
 
 Vous pouvez suivre votre progression et monter en niveau :blush:
 
