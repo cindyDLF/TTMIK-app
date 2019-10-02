@@ -1,16 +1,19 @@
 import React from "react";
-import { StyleSheet, View, Dimensions, Text } from "react-native";
+import { StyleSheet, View, Dimensions, Text, Image } from "react-native";
 import { withNavigation } from "react-navigation";
 
 //import Components
 import Title from "./Title";
 import Back from "./Back";
 
+//import assets
+import { avatar } from "../assets/avatar";
+
 import { COLORS, FONT } from "../constants/Global";
 
 const width = Dimensions.get("window").width;
 
-const Header = ({ headerName, lvl, pt, goBack, navigation }) => {
+const Header = ({ headerName, lvl, pt, goBack, navigation, avatarUser }) => {
   if (goBack) {
     return (
       <View style={styles.headerBack}>
@@ -21,9 +24,13 @@ const Header = ({ headerName, lvl, pt, goBack, navigation }) => {
   } else {
     return (
       <View style={styles.headerContainer}>
-        <Text style={styles.text}>level {lvl}</Text>
+        <Image source={avatar[avatarUser]} style={styles.avatar} />
+
         <Text style={styles.headerTitle}>{headerName}</Text>
-        <Text style={styles.text}>{pt} point</Text>
+        <View>
+          <Text style={styles.text}>{lvl} lvl</Text>
+          <Text style={styles.text}>{pt} pt</Text>
+        </View>
       </View>
     );
   }
@@ -35,7 +42,7 @@ const styles = StyleSheet.create({
     height: 160,
     backgroundColor: COLORS.primaryColor,
     paddingTop: 60,
-    padding: 30,
+    padding: 10,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
@@ -75,6 +82,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 30,
     fontWeight: "bold"
+  },
+  avatar: {
+    width: 70,
+    height: 70
   }
 });
 

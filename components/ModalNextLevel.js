@@ -14,12 +14,10 @@ const ModalNextLevel = () => {
   const [canUpdate, setCanUpdate] = useState(true);
 
   updateStorage = data => {
-    console.log(data);
     AsyncStorage.setItem("@TTMIK:user", JSON.stringify(data.updateLevel));
     setUser(data.updateLevel);
     setCanUpdate(false);
   };
-  console.log(user.level);
 
   return (
     <Mutation

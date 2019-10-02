@@ -161,7 +161,6 @@ const Exercice = ({ navigation }) => {
               }
             } else {
               if (dataExercice !== null) {
-                console.log(step / 10);
                 return (
                   <Container
                     paddingTop={40}
@@ -221,6 +220,7 @@ const Exercice = ({ navigation }) => {
                   headerName={data.exerciceById.name}
                   lvl={user.level}
                   pt={user.point}
+                  avatarUser={user.avatar}
                 />
               ) : null}
 

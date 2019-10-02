@@ -60,7 +60,12 @@ const Progression = () => {
   };
   return (
     <Container>
-      <Header headerName={user.username} lvl={user.level} pt={user.point} />
+      <Header
+        headerName={user.username}
+        lvl={user.level}
+        pt={user.point}
+        avatarUser={user.avatar}
+      />
 
       <View style={{ width, alignItems: "center", height }}>
         <ScrollView style={{ width }}>{displayProgression()}</ScrollView>

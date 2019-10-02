@@ -44,7 +44,12 @@ const ExercicesList = ({ navigation }) => {
 
   return (
     <View>
-      <Header headerName={thematicName} lvl={user.level} pt={user.point} />
+      <Header
+        headerName={thematicName}
+        lvl={user.level}
+        pt={user.point}
+        avatar={user.avatar}
+      />
       <Container alignItems="center">
         <ScrollView style={{ width: "100%", height: "100%" }}>
           {displayExercices()}

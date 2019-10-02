@@ -47,7 +47,12 @@ const Thematics = ({ navigation }) => {
   };
   return (
     <View>
-      <Header headerName="Training" lvl={user.level} pt={user.point} />
+      <Header
+        headerName="Training"
+        lvl={user.level}
+        pt={user.point}
+        avatarUser={user.avatar}
+      />
       <Container alignItems="flex-start" paddingTop={30}>
         <Query query={GET_ALL_THEMATICS} fetchPolicy="cache-and-network">
           {({ data, loading }) => {

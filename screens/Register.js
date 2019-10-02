@@ -19,16 +19,43 @@ import Back from "../components/Back";
 import { COLORS } from "../constants/Global";
 //import hook
 import useInput from "../hooks/useInput";
+//import assets
+import { avatar } from "../assets/avatar";
 
 const width = Dimensions.get("window").width;
 
 const Register = ({ navigation }) => {
   const [chooseAvatar, setchooseAvatar] = useState(false);
-  const [avatar, setAvatar] = useState("");
+  const [avatarUser, setAvatar] = useState("");
   const username = useInput();
   const email = useInput();
   const password = useInput();
   const passwordConfirm = useInput();
+
+  displayAvatar = () => {
+    return (
+      <View>
+        {Object.entries(avatar).map(([key, v]) => {
+          return (
+            <TouchableOpacity
+              key={key}
+              onPress={() => setAvatar(key)}
+              style={[
+                styles.borderGender,
+                avatarUser === key ? styles.border : styles.noneBorder
+              ]}
+            >
+              <Image
+                style={{ width: width - 250, height: width - 250, margin: 10 }}
+                source={v}
+              />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    );
+  };
+
   stepCreateAccount = () => {
     if (!chooseAvatar) {
       return (
@@ -73,7 +100,8 @@ const Register = ({ navigation }) => {
             <Back back={() => setchooseAvatar(false)} />
             <Text style={{ fontSize: 20 }}>Choose your avatar</Text>
           </View>
-          <TouchableOpacity
+          {displayAvatar()}
+          {/* <TouchableOpacity
             onPress={() => setAvatar("male")}
             style={[
               styles.borderGender,
@@ -100,7 +128,7 @@ const Register = ({ navigation }) => {
               }}
               source={require("../assets/avatar/woman.png")}
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       );
     }
@@ -127,7 +155,7 @@ const Register = ({ navigation }) => {
                         username: username.value,
                         email: email.value,
                         password: password.value,
-                        avatar: avatar
+                        avatar: avatarUser
                       }
                     });
                     if (user) {
@@ -158,8 +186,8 @@ const Register = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   borderGender: {
-    borderRadius: 200,
-    borderWidth: 5
+    borderRadius: 700,
+    borderWidth: 4
   },
   noneBorder: {
     borderColor: "transparent"

@@ -21,7 +21,6 @@ const Auth = ({ navigation }) => {
         "Roboto-Black": require("../assets/fonts/Roboto-Black.ttf")
       });
       const userStorage = await AsyncStorage.getItem("@TTMIK:user");
-      console.log(JSON.parse(userStorage));
       const progressionStorage = await AsyncStorage.getItem(
         "@TTMIK:progression"
       );

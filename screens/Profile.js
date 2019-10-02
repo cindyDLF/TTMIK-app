@@ -33,7 +33,12 @@ const Profile = ({ navigation }) => {
   if (user !== null) {
     return (
       <View>
-        <Header headerName={user.username} lvl={user.level} pt={user.point} />
+        <Header
+          headerName={user.username}
+          lvl={user.level}
+          pt={user.point}
+          avatarUser={user.avatar}
+        />
         <Container alignItems="center" paddingTop={40}>
           <Image
             style={{ width: width - 190, height: width - 190, margin: 10 }}
