@@ -9,38 +9,64 @@ import Container from "../../components/Container";
 import Header from "../../components/Header";
 //import hooks
 import UserContext from "../../hooks/userContext";
-//import image
+//import images
 import { vocabularies } from "../../assets/vocabularies";
-import { COLORS, FONT } from "../../constants/Global";
+//import lib swipe
+import SwipeCards from "react-native-swipe-cards";
 
-const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
 const Swipe = ({ navigation }) => {
   const exerciceId = navigation.getParam("exerciceId");
   const { user } = useContext(UserContext);
-  const [randomBoolean, setRandomBoolean] = useState(false);
-
   const [exerciceData, setExerciceData] = useState({});
+  const [arrExercice, setArrExercice] = useState([]);
+  const [step, setStep] = useState(0);
+
+  handleYup = card => {
+    console.log(card.img);
+    if (card.answer) {
+      console.log("good game");
+      if (step < 10) {
+        setStep(step + 1);
+      }
+    } else {
+      console.log("lost");
+      if (step < 10) {
+        setStep(step + 1);
+      }
+    }
+  };
+  handleNope = card => {
+    if (!card.answer) {
+      console.log("good game");
+      if (step < 10) {
+        setStep(step + 1);
+      }
+    } else {
+      console.log("lost");
+      if (step < 10) {
+        setStep(step + 1);
+      }
+    }
+  };
+
+  _card = data => {
+    return (
+      <View style={styles.cardContainer}>
+        <Image
+          style={{ width: 140, height: 140, margin: 10 }}
+          source={vocabularies[data.img]}
+        />
+        <Text>{data.img}</Text>
+      </View>
+    );
+  };
 
   _displayExerciceSwipe = () => {
     if (exerciceData.data !== undefined) {
-      setRandomBoolean(Math.round(Math.random() * 1 + 0) === 0);
-      const response =
-        exerciceData.data[Math.floor(Math.random() * exerciceData.data.length)];
-      let badResponse =
-        exerciceData.data[Math.floor(Math.random() * exerciceData.data.length)];
-
-      if (badResponse === response) {
-        badResponse =
-          exerciceData.data[
-            Math.floor(Math.random() * exerciceData.data.length)
-          ];
-      }
-      console.log(randomBoolean);
-
       return (
-        <Container>
+        <View>
           <Header
             headerName={exerciceData.name}
             lvl={user.level}
@@ -56,20 +82,16 @@ const Swipe = ({ navigation }) => {
               Swipe to the right if you think this translation is correct, to
               the left if you think it's incorrect
             </Text>
-            <View style={styles.cardContainer}>
-              <Image
-                style={{ width: 140, height: 140, margin: 10 }}
-                source={vocabularies[response.mean]}
-              />
-              <Text>{response.mean}</Text>
-            </View>
-            {randomBoolean ? (
-              <Text style={styles.textKr}>{response.kr}</Text>
-            ) : (
-              <Text style={styles.textKr}>{badResponse.kr}</Text>
-            )}
+            <SwipeCards
+              cards={arrExercice}
+              renderCard={cardData => _card(cardData)}
+              renderNoMoreCards={() => <NoMoreCards />}
+              handleYup={handleYup}
+              handleNope={handleNope}
+            />
+            <Text style={styles.textKr}>{arrExercice[step].proposition}</Text>
           </Container>
-        </Container>
+        </View>
       );
     } else {
       return <Loading />;
@@ -77,6 +99,21 @@ const Swipe = ({ navigation }) => {
   };
   getData = data => {
     setExerciceData(data);
+    const arr = [];
+    let goodResponse;
+    let badResponse;
+    let getRandom;
+    for (let i = 0; i <= 10; i++) {
+      goodResponse = data.data[Math.floor(Math.random() * data.data.length)];
+      badResponse = data.data[Math.floor(Math.random() * data.data.length)];
+      getRandom = Math.round(Math.random() * 1 + 0) === 0;
+      arr.push({
+        img: goodResponse.mean,
+        proposition: getRandom ? goodResponse.kr : badResponse.kr,
+        answer: getRandom
+      });
+    }
+    setArrExercice(arr);
   };
   return (
     <Query
@@ -118,7 +155,7 @@ const styles = StyleSheet.create({
     fontFamily: FONT.primaryFont,
     fontSize: 40,
     fontWeight: "bold",
-    marginTop: 70
+    marginTop: 350
   },
   textExplain: {
     fontFamily: FONT.primaryFont,
