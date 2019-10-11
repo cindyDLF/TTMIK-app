@@ -13,27 +13,27 @@ import * as Animatable from "react-native-animatable";
 import * as Progress from "react-native-progress";
 
 //import Components
-import Loading from "../components/Loading";
-import Header from "../components/Header";
-import Container from "../components/Container";
-import Modal from "../components/Modal";
-import Title from "../components/Title";
+import Loading from "../../components/Loading";
+import Header from "../../components/Header";
+import Container from "../../components/Container";
+import Modal from "../../components/Modal";
+import Title from "../../components/Title";
 
 //import hooks
-import UserContext from "../hooks/userContext";
+import UserContext from "../../hooks/userContext";
 
 //graphql & call api
 import { Query } from "react-apollo";
-import { EXERCICE_BY_ID } from "../actions/queries";
+import { EXERCICE_BY_ID } from "../../actions/queries";
 
-import { COLORS, FONT } from "../constants/Global";
+import { COLORS, FONT } from "../../constants/Global";
 
-import { shuffle } from "../utils";
+import { shuffle } from "../../utils";
 
 const height = Dimensions.get("window").height;
 const width = Dimensions.get("window").width;
 
-const Exercice = ({ navigation }) => {
+const Qcm = ({ navigation }) => {
   const exerciceId = navigation.getParam("exerciceId");
   const { user } = useContext(UserContext);
   const [switchExercice, setSwitchExercice] = useState(false);
@@ -141,7 +141,7 @@ const Exercice = ({ navigation }) => {
                       onPress={() => _speak(item.kr)}
                     >
                       <Image
-                        source={require("../assets/megaphone.png")}
+                        source={require("../../assets/megaphone.png")}
                         style={{
                           width: 25,
                           height: 25,
@@ -305,4 +305,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Exercice;
+export default Qcm;

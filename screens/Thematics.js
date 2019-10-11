@@ -31,18 +31,52 @@ const Thematics = ({ navigation }) => {
 
   _renderItem = ({ item, index }) => {
     return (
-      <TouchableOpacity
-        key={item.id}
-        style={styles.cardContainer}
-        onPress={() =>
-          navigation.navigate("ExercicesList", {
-            exercicesList: item.exercice,
-            thematicName: item.name
-          })
-        }
-      >
-        <Text style={styles.textCard}>{item.name}</Text>
-      </TouchableOpacity>
+      <View style={styles.cardContainer}>
+        <TouchableOpacity
+          style={styles.cardThematic}
+          key={item.id}
+          onPress={() =>
+            navigation.navigate("ExercicesList", {
+              exercicesList: item.exercice,
+              thematicName: item.name
+            })
+          }
+        >
+          <Text style={styles.textCard}>{item.name}</Text>
+        </TouchableOpacity>
+
+        <ScrollView>
+          <View style={styles.cardExerciceContainer}>
+            {item.exercice.map((element, idx) => {
+              if (element.access_level <= user.level) {
+                return (
+                  <TouchableOpacity
+                    key={idx}
+                    style={styles.cardExercice}
+                    onPress={() =>
+                      navigation.navigate(element.exercice_type, {
+                        exerciceId: element.id
+                      })
+                    }
+                  >
+                    <Text style={styles.textCardExercice}>{element.name}</Text>
+                  </TouchableOpacity>
+                );
+              } else {
+                return (
+                  <TouchableOpacity
+                    key={idx}
+                    style={styles.cardExercice}
+                    onPress={() => console.log("need", element.access_level)}
+                  >
+                    <Text>Not access</Text>
+                  </TouchableOpacity>
+                );
+              }
+            })}
+          </View>
+        </ScrollView>
+      </View>
     );
   };
   return (
@@ -64,35 +98,22 @@ const Thematics = ({ navigation }) => {
               );
             }
 
-            // const thematicCard = data.allThematic.map(thematic => {
-            //   return (
-            //     <TouchableOpacity
-            //       style={styles.cardContainer}
-            //       key={thematic.id}
-            //       onPress={() =>
-            //         navigation.navigate("ExercicesList", {
-            //           exercicesList: thematic.exercice,
-            //           thematicName: thematic.name
-            //         })
-            //       }
-            //     >
-            //       <Text style={styles.textCard}>{thematic.name}</Text>
-            //     </TouchableOpacity>
-            //   );
-            // });
             return (
-              <Carousel
-                ref={c => {
-                  this._carousel = c;
-                }}
-                data={data.allThematic}
-                renderItem={_renderItem}
-                sliderWidth={width}
-                itemWidth={width - 50}
-                sliderHeight={height}
-                itemHeight={height}
-                activeAnimationType="spring"
-              />
+              <View>
+                <Carousel
+                  ref={c => {
+                    this._carousel = c;
+                  }}
+                  loop={true}
+                  data={data.allThematic}
+                  renderItem={_renderItem}
+                  sliderWidth={width}
+                  itemWidth={width - 50}
+                  sliderHeight={height}
+                  itemHeight={height}
+                  activeAnimationType="spring"
+                />
+              </View>
             );
           }}
         </Query>
@@ -103,14 +124,19 @@ const Thematics = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    height: width - 80,
-    width: width - 80,
-    borderRadius: 10,
-    marginLeft: "5%",
-    marginBottom: 20,
+    height: height - 300,
+
+    width: "100%"
+  },
+  cardThematic: {
+    height: height - 600,
     backgroundColor: COLORS.progressColor,
     alignItems: "center",
     justifyContent: "center",
+    borderRadius: 10,
+    //marginLeft: "5%",
+    //marginBottom: 20,
+
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -123,6 +149,34 @@ const styles = StyleSheet.create({
     fontSize: 25,
     fontFamily: FONT.primaryFont,
     color: "#fff"
+  },
+  cardExercice: {
+    width: width / 3,
+    height: width / 3,
+    margin: 10,
+    backgroundColor: COLORS.secondaryColor,
+    borderRadius: 10,
+    //marginLeft: "5%",
+    //marginBottom: 20,
+
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  cardExerciceContainer: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop: 60,
+    padding: 10
+  },
+  textCardExercice: {
+    fontFamily: FONT.primaryFont
   }
 });
 

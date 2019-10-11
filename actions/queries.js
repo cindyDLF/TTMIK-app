@@ -4,6 +4,8 @@ export const GET_ALL_EXERCICES = gql`
   {
     allExercices {
       name
+      access_level
+      exercice_type
     }
   }
 `;
@@ -30,6 +32,8 @@ export const GET_ALL_THEMATICS = gql`
       exercice {
         id
         name
+        access_level
+        exercice_type
       }
     }
   }

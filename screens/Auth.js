@@ -27,7 +27,7 @@ const Auth = ({ navigation }) => {
       if (userStorage != null && progressionStorage !== null) {
         setUser(JSON.parse(userStorage));
         setProgression(JSON.parse(progressionStorage));
-        navigation.navigate("Profile");
+        navigation.navigate("Training");
       } else {
         navigation.navigate("Login");
       }

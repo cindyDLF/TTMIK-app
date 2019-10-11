@@ -17,8 +17,11 @@ import Progression from "./screens/Progression";
 import Thematics from "./screens/Thematics";
 import ExercicesList from "./screens/ExercicesList";
 import Lesson from "./screens/Lesson";
-import Exercice from "./screens/Exercice";
 import ExerciceEnd from "./screens/ExerciceEnd";
+
+//import Exercice
+import Qcm from "./screens/Exercices/Qcm";
+import Swipe from "./screens/Exercices/Swipe";
 
 const LoginNavigator = createSwitchNavigator(
   {
@@ -55,7 +58,8 @@ const TrainingNavigator = createStackNavigator(
     Thematics: { screen: Thematics },
     ExercicesList: { screen: ExercicesList },
     Lesson: { screen: Lesson },
-    Exercice: { screen: Exercice },
+    qcm: { screen: Qcm },
+    swipe: { screen: Swipe },
     ExerciceEnd: { screen: ExerciceEnd }
   },
   {
