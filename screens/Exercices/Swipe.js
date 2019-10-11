@@ -14,6 +14,8 @@ import { vocabularies } from "../../assets/vocabularies";
 //import lib swipe
 import SwipeCards from "react-native-swipe-cards";
 
+import { FONT } from "../../constants/Global";
+
 const width = Dimensions.get("window").width;
 
 const Swipe = ({ navigation }) => {
