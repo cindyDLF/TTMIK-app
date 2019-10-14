@@ -12,6 +12,7 @@ import { avatar } from "../assets/avatar";
 import { COLORS, FONT } from "../constants/Global";
 
 const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 const Header = ({ headerName, lvl, pt, goBack, navigation, avatarUser }) => {
   if (goBack) {
@@ -39,7 +40,7 @@ const Header = ({ headerName, lvl, pt, goBack, navigation, avatarUser }) => {
 const styles = StyleSheet.create({
   headerContainer: {
     width,
-    height: 160,
+    height: height - 1000,
     backgroundColor: COLORS.primaryColor,
     paddingTop: 60,
     padding: 10,

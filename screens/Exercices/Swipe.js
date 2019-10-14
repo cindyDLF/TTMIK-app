@@ -7,12 +7,14 @@ import { EXERCICE_BY_ID } from "../../actions/queries";
 import Loading from "../../components/Loading";
 import Container from "../../components/Container";
 import Header from "../../components/Header";
+import Modal from "../../components/Modal";
 //import hooks
 import UserContext from "../../hooks/userContext";
 //import images
 import { vocabularies } from "../../assets/vocabularies";
-//import lib swipe
+//import lib
 import SwipeCards from "react-native-swipe-cards";
+import * as Animatable from "react-native-animatable";
 
 import { FONT } from "../../constants/Global";
 
@@ -24,30 +26,32 @@ const Swipe = ({ navigation }) => {
   const [exerciceData, setExerciceData] = useState({});
   const [arrExercice, setArrExercice] = useState([]);
   const [step, setStep] = useState(0);
+  const [point, setPoint] = useState(0);
 
-  handleYup = card => {
-    console.log(card.img);
+  handleRight = card => {
     if (card.answer) {
       console.log("good game");
-      if (step < 10) {
+      if (step < exerciceData.step) {
         setStep(step + 1);
+        setPoint(point + exerciceData.point_per_step);
       }
     } else {
       console.log("lost");
-      if (step < 10) {
+      if (step < exerciceData.step) {
         setStep(step + 1);
       }
     }
   };
-  handleNope = card => {
+  handleLeft = card => {
     if (!card.answer) {
       console.log("good game");
-      if (step < 10) {
+      if (step < exerciceData.step) {
         setStep(step + 1);
+        setPoint(point + exerciceData.point_per_step);
       }
     } else {
       console.log("lost");
-      if (step < 10) {
+      if (step < exerciceData.step) {
         setStep(step + 1);
       }
     }
@@ -66,46 +70,57 @@ const Swipe = ({ navigation }) => {
   };
 
   _displayExerciceSwipe = () => {
+    console.log(point);
     if (exerciceData.data !== undefined) {
-      return (
-        <View>
-          <Header
-            headerName={exerciceData.name}
-            lvl={user.level}
-            pt={user.point}
-            avatarUser={user.avatar}
-          />
-          <Container
-            paddingTop={40}
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Text style={styles.textExplain}>
-              Swipe to the right if you think this translation is correct, to
-              the left if you think it's incorrect
-            </Text>
-            <SwipeCards
-              cards={arrExercice}
-              renderCard={cardData => _card(cardData)}
-              renderNoMoreCards={() => <NoMoreCards />}
-              handleYup={handleYup}
-              handleNope={handleNope}
+      if (step !== exerciceData.step) {
+        return (
+          <Container>
+            <Header
+              headerName={exerciceData.name}
+              lvl={user.level}
+              pt={user.point}
+              avatarUser={user.avatar}
             />
-            <Text style={styles.textKr}>{arrExercice[step].proposition}</Text>
+            <Container
+              paddingTop={40}
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Text style={styles.textExplain}>
+                Swipe to the right if you think this translation is correct, to
+                the left if you think it's incorrect
+              </Text>
+              <SwipeCards
+                cards={arrExercice}
+                renderCard={cardData => _card(cardData)}
+                handleYup={handleRight}
+                handleNope={handleLeft}
+                showNope={false}
+                showYup={false}
+              />
+              <Text style={styles.textKr}>{arrExercice[step].proposition}</Text>
+            </Container>
           </Container>
-        </View>
-      );
+        );
+      } else {
+        return (
+          <Animatable.View>
+            <Modal point={point} exerciceId={exerciceData.id} />
+          </Animatable.View>
+        );
+      }
     } else {
       return <Loading />;
     }
   };
-  getData = data => {
+  getData = async data => {
     setExerciceData(data);
+
     const arr = [];
     let goodResponse;
     let badResponse;
     let getRandom;
-    for (let i = 0; i <= 10; i++) {
+    for (let i = 0; i <= data.step; i++) {
       goodResponse = data.data[Math.floor(Math.random() * data.data.length)];
       badResponse = data.data[Math.floor(Math.random() * data.data.length)];
       getRandom = Math.round(Math.random() * 1 + 0) === 0;
